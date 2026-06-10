@@ -1,1 +1,37 @@
-/* Caso queira utilizar framework como Bootstrap para estilização, pode utilizar. Basta ignoar esse arquivo */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+}
+
+#input-nome, #input-quantidade {
+    padding: 8px;
+    margin: 10px;
+}
+
+#btn-cadastrar {
+    padding: 8px 20px;
+    margin: 20px;
+}
+
+#lista-materiais {
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+#lista-materiais th, #lista-materiais td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
