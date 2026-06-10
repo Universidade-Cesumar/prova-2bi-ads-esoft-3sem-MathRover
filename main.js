@@ -18,3 +18,13 @@ function carregarMateriais() {
 }
 
 carregarMateriais();
+
+document.getElementById('btn-cadastrar').addEventListener('click', function() {
+    console.log('Botão foi clicado!');
+    
+    const nome = document.getElementById('input-nome').value;
+    const quantidade = parseInt(document.getElementById('input-quantidade').value);
+    
+    console.log('Nome:', nome);
+    console.log('Quantidade:', quantidade);
+});
