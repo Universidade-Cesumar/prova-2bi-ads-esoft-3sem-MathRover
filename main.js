@@ -1,20 +1,26 @@
-const newTask = {
-  content: 'Check out mockapi.io',
-  completed: false,
+const novoMaterial = {
+  nome: document.getElementById('input-nome').value,
+  quantidade: parseInt(document.getElementById('input-quantidade').value)
 };
 
-fetch('https://PROJECT_TOKEN.mockapi.io/tasks', {
+fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens', {
   method: 'POST',
   headers: {'content-type':'application/json'},
-  // Send your data in the request body as JSON
-  body: JSON.stringify(newTask)
-}).then(res => {
-  if (res.ok) {
-      return res.json();
-  }
-  // handle error
-}).then(task => {
-  // do something with the new task
-}).catch(error => {
-  // handle error
+  body: JSON.stringify(novoMaterial)
 })
+.then(res => {
+  if (res.ok) {
+    return res.json();
+  }
+  throw new Error('Erro na requisição');
+})
+.then(material => {
+  console.log('Material cadastrado:', material);
+  document.getElementById('input-nome').value = '';
+  document.getElementById('input-quantidade').value = '';
+  carregarMateriais();
+})
+.catch(error => {
+  console.error('Erro:', error);
+  alert('Erro ao cadastrar material');
+});
