@@ -57,3 +57,39 @@ document.getElementById('btn-cadastrar').addEventListener('click', function() {
         alert('Erro ao cadastrar material');
     });
 });
+
+document.getElementById('btn-cadastrar').addEventListener('click', function() {
+    const nome = document.getElementById('input-nome').value;
+    const quantidade = parseInt(document.getElementById('input-quantidade').value);
+    
+    const novoMaterial = {
+        nome: nome,
+        quantidade: quantidade
+    };
+
+    fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens', {
+        method: 'POST',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify(novoMaterial)
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json();
+        }
+        throw new Error('Erro na requisição');
+    })
+    .then(material => {
+        console.log('Material cadastrado:', material);
+        
+        // Limpar os inputs
+        document.getElementById('input-nome').value = '';
+        document.getElementById('input-quantidade').value = '';
+        
+        // Recarregar a tabela
+        carregarMateriais();
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao cadastrar material');
+    });
+});
