@@ -11,7 +11,11 @@ function carregarMateriais() {
                         <td>${item.id}</td>
                         <td>${item.nome}</td>
                         <td>${item.quantidade}</td>
-                    </table>
+                        <td>
+                            <button class="btn-baixar" data-id="${item.id}" data-quantidade="${item.quantidade}">Baixar</button>
+                            <button class="btn-excluir" data-id="${item.id}">Excluir</button>
+                        </td>
+                    </tr>
                 `;
             });
         })
