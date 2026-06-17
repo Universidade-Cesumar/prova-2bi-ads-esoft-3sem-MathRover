@@ -22,6 +22,12 @@ function carregarMateriais() {
         .catch(error => console.error('Erro ao carregar:', error));
 }
 
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    if (quantidadeRetirada <= 0) return false;
+    if (quantidadeRetirada > estoqueAtual) return false;
+    return true;
+}
+
 document.getElementById('btn-cadastrar').addEventListener('click', function() {
     console.log('Botão foi clicado!');
     
