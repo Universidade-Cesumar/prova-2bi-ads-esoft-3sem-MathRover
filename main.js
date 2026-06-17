@@ -1,4 +1,3 @@
-// PARTE 1: Função para carregar materiais
 function carregarMateriais() {
     fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens')
         .then(res => res.json())
