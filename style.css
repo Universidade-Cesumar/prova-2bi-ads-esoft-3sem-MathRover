@@ -28,7 +28,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* Container do formulário - ALINHADO PERFEITAMENTE */
 .form-wrapper {
     background: white;
     padding: 25px 30px;
@@ -44,6 +43,21 @@ body {
     width: 100%;
 }
 
+.retirada-wrapper {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    max-width: 500px;
+    width: 100%;
+}
+
 label {
     color: #2c3e50;
     font-weight: 600;
@@ -51,7 +65,7 @@ label {
     white-space: nowrap;
 }
 
-#input-nome, #input-quantidade {
+#input-nome, #input-quantidade, #input-retirada {
     padding: 10px 14px;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
@@ -60,7 +74,7 @@ label {
     width: 180px;
 }
 
-#input-nome:focus, #input-quantidade:focus {
+#input-nome:focus, #input-quantidade:focus, #input-retirada:focus {
     outline: none;
     border-color: #6c5ce7;
     box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
@@ -89,7 +103,6 @@ label {
     transform: translateY(0);
 }
 
-/* Tabela */
 #lista-materiais {
     margin: 20px auto;
     border-collapse: collapse;
@@ -114,6 +127,7 @@ label {
     padding: 12px;
     border-bottom: 1px solid #ecf0f1;
     color: #2c3e50;
+    vertical-align: middle;
 }
 
 #lista-materiais tr:last-child td {
@@ -133,9 +147,43 @@ table {
     margin-right: auto;
 }
 
-/* Responsivo */
+.btn-baixar {
+    padding: 6px 14px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 6px;
+}
+
+.btn-baixar:hover {
+    background: #e67e22;
+    transform: scale(1.05);
+}
+
+.btn-excluir {
+    padding: 6px 14px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-excluir:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
 @media (max-width: 768px) {
-    .form-wrapper {
+    .form-wrapper, .retirada-wrapper {
         flex-direction: column;
         align-items: stretch;
         padding: 20px;
@@ -147,7 +195,7 @@ table {
         margin-bottom: 2px;
     }
 
-    #input-nome, #input-quantidade {
+    #input-nome, #input-quantidade, #input-retirada {
         width: 100%;
     }
 
@@ -169,5 +217,11 @@ table {
     
     #lista-materiais th, #lista-materiais td {
         padding: 8px;
+    }
+
+    .btn-baixar, .btn-excluir {
+        display: block;
+        width: 100%;
+        margin: 4px 0;
     }
 }
