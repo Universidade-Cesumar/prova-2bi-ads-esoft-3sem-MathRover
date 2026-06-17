@@ -16,15 +16,14 @@
         <input id="input-nome" type="text" placeholder="Digite o nome do produto">
 
         <label for="input-quantidade">Quantidade:</label>
-        <input id="input-quantidade" type="number" placeholder="Digite a quantidade">
+        <input id="input-quantidade" type="number" placeholder="Digite a quantidade" min="1" step="1">
 
         <button id="btn-cadastrar">Cadastrar</button>
     </div>
 
-    <!-- NOVO: Área de retirada -->
     <div class="retirada-wrapper">
         <label for="input-retirada">Quantidade a retirar:</label>
-        <input id="input-retirada" type="number" placeholder="Digite a quantidade" min="1">
+        <input id="input-retirada" type="number" placeholder="Digite a quantidade" min="1" step="1">
     </div>
 
     <table id="lista-materiais">
