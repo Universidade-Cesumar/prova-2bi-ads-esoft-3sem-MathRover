@@ -62,6 +62,34 @@ document.getElementById('btn-cadastrar').addEventListener('click', function() {
 document.addEventListener('click', function(event) {
     const target = event.target;
 
+    if (target.classList.contains('btn-baixar')) {
+        const id = target.dataset.id;
+        const estoqueAtual = parseInt(target.dataset.quantidade);
+        const quantidadeRetirada = parseInt(document.getElementById('input-retirada').value);
+
+        if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+            alert('Quantidade inválida! Verifique se é maior que 0 e não excede o estoque.');
+            return;
+        }
+
+        const novaQuantidade = estoqueAtual - quantidadeRetirada;
+
+        fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ quantidade: novaQuantidade })
+        })
+        .then(res => {
+            if (res.ok) return res.json();
+            throw new Error('Erro ao atualizar');
+        })
+        .then(() => carregarMateriais())
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao dar baixa no estoque');
+        });
+    }
+
     if (target.classList.contains('btn-excluir')) {
         const id = target.dataset.id;
         if (!confirm('Tem certeza que deseja excluir este item?')) return;
