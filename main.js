@@ -29,42 +29,56 @@ function validarRetirada(estoqueAtual, quantidadeRetirada) {
 }
 
 document.getElementById('btn-cadastrar').addEventListener('click', function() {
-    console.log('Botão foi clicado!');
-    
     const nome = document.getElementById('input-nome').value;
     const quantidade = parseInt(document.getElementById('input-quantidade').value);
     
-    console.log('Nome:', nome);
-    console.log('Quantidade:', quantidade);
-    
-    const novoMaterial = {
-        nome: nome,
-        quantidade: quantidade
-    };
+    if (!nome || isNaN(quantidade) || quantidade <= 0) {
+        alert('Preencha nome e quantidade válida (maior que 0)');
+        return;
+    }
+
+    const novoMaterial = { nome, quantidade };
 
     fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens', {
         method: 'POST',
-        headers: {'content-type':'application/json'},
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify(novoMaterial)
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
+        if (res.ok) return res.json();
         throw new Error('Erro na requisição');
     })
-    .then(material => {
-        console.log('Material cadastrado:', material);
-        
+    .then(() => {
         document.getElementById('input-nome').value = '';
         document.getElementById('input-quantidade').value = '';
-        
         carregarMateriais();
     })
     .catch(error => {
         console.error('Erro:', error);
         alert('Erro ao cadastrar material');
     });
+});
+
+document.addEventListener('click', function(event) {
+    const target = event.target;
+
+    if (target.classList.contains('btn-excluir')) {
+        const id = target.dataset.id;
+        if (!confirm('Tem certeza que deseja excluir este item?')) return;
+
+        fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
+            method: 'DELETE'
+        })
+        .then(res => {
+            if (res.ok) return res.json();
+            throw new Error('Erro ao excluir');
+        })
+        .then(() => carregarMateriais())
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao excluir material');
+        });
+    }
 });
 
 carregarMateriais();
