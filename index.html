@@ -11,21 +11,17 @@
 
     <h2 id="produtos">Cadastro de produtos</h2>
 
-    <label for="input-nome">Nome do material:</label>
-    <input id="input-nome" type="text" placeholder="Digite o nome do produto">
+    <div class="form-wrapper">
+        <label for="input-nome">Nome do material:</label>
+        <input id="input-nome" type="text" placeholder="Digite o nome do produto">
 
-    <br><br>
+        <label for="input-quantidade">Quantidade:</label>
+        <input id="input-quantidade" type="number" placeholder="Digite a quantidade">
 
-    <label for="input-quantidade">Quantidade:</label>
-    <input id="input-quantidade" type="number" placeholder="Digite a quantidade">
+        <button id="btn-cadastrar">Cadastrar</button>
+    </div>
 
-    <br><br>
-
-    <button id="btn-cadastrar">Cadastrar</button>
-
-    <br><br>
-
-        <table id="lista-materiais">
+    <table id="lista-materiais">
         <thead>
             <tr>
                 <th>ID</th>
@@ -35,7 +31,6 @@
         </thead>
         <tbody></tbody>
     </table>
-
 
     <script src="main.js"></script>
 </body>
