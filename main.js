@@ -27,6 +27,45 @@ function validarRetirada(estoqueAtual, quantidadeRetirada) {
     return true;
 }
 
+// main.js - Commit 1: Refatoração para renderizar com filtro e total
+
+function renderizarTabela(dados) {
+    const tbody = document.querySelector('#lista-materiais tbody');
+    tbody.innerHTML = '';
+    let total = 0;
+    dados.forEach(item => {
+        const tr = document.createElement('tr');
+        if (item.quantidade < 10) {
+            tr.classList.add('estoque-critico');
+        }
+        tr.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.nome}</td>
+            <td>${item.quantidade}</td>
+            <td>
+                <button class="btn-baixar" data-id="${item.id}" data-quantidade="${item.quantidade}">Baixar</button>
+                <button class="btn-excluir" data-id="${item.id}">Excluir</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        total++;
+    });
+    document.getElementById('total-itens').textContent = total;
+}
+
+function carregarMateriais() {
+    fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens')
+        .then(res => res.json())
+        .then(dados => {
+            window.dadosMateriais = dados;
+            renderizarTabela(dados);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar:', error);
+            alert('Erro ao carregar materiais. Verifique sua conexão.');
+        });
+}
+
 document.getElementById('btn-cadastrar').addEventListener('click', function() {
     const nome = document.getElementById('input-nome').value;
     const quantidade = parseInt(document.getElementById('input-quantidade').value);
