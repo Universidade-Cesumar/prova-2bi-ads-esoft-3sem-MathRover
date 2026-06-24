@@ -1,33 +1,4 @@
-function carregarMateriais() {
-    fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens')
-        .then(res => res.json())
-        .then(dados => {
-            const tbody = document.querySelector('#lista-materiais tbody');
-            tbody.innerHTML = '';
-            dados.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td>${item.nome}</td>
-                        <td>${item.quantidade}</td>
-                        <td>
-                            <button class="btn-baixar" data-id="${item.id}" data-quantidade="${item.quantidade}">Baixar</button>
-                            <button class="btn-excluir" data-id="${item.id}">Excluir</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        })
-        .catch(error => console.error('Erro ao carregar:', error));
-}
-
-function validarRetirada(estoqueAtual, quantidadeRetirada) {
-    if (quantidadeRetirada <= 0) return false;
-    if (quantidadeRetirada > estoqueAtual) return false;
-    return true;
-}
-
-// main.js - Commit 1: Refatoração para renderizar com filtro e total
+let dadosMateriais = [];
 
 function renderizarTabela(dados) {
     const tbody = document.querySelector('#lista-materiais tbody');
@@ -53,38 +24,39 @@ function renderizarTabela(dados) {
     document.getElementById('total-itens').textContent = total;
 }
 
-function carregarMateriais() {
-    fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens')
-        .then(res => res.json())
-        .then(dados => {
-            window.dadosMateriais = dados;
-            renderizarTabela(dados);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar:', error);
-            alert('Erro ao carregar materiais. Verifique sua conexão.');
-        });
+async function carregarMateriais() {
+    try {
+        const response = await fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens');
+        if (!response.ok) throw new Error('Erro ao carregar dados');
+        const dados = await response.json();
+        dadosMateriais = dados;
+        renderizarTabela(dados);
+    } catch (error) {
+        console.error('Erro ao carregar:', error);
+        alert('Erro ao carregar materiais. Verifique sua conexão.');
+    }
 }
 
-// Commit 3: Tratamento de erros com try/catch
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    if (quantidadeRetirada <= 0) return false;
+    if (quantidadeRetirada > estoqueAtual) return false;
+    return true;
+}
+
 document.getElementById('btn-cadastrar').addEventListener('click', async function() {
-    const nome = document.getElementById('input-nome').value;
+    const nome = document.getElementById('input-nome').value.trim();
     const quantidade = parseInt(document.getElementById('input-quantidade').value);
-    
     if (!nome || isNaN(quantidade) || quantidade <= 0) {
         alert('Preencha nome e quantidade válida (maior que 0)');
         return;
     }
-
-    const novoMaterial = { nome, quantidade };
-
     try {
         const response = await fetch('https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(novoMaterial)
+            body: JSON.stringify({ nome, quantidade })
         });
-        if (!response.ok) throw new Error('Erro na requisição');
+        if (!response.ok) throw new Error('Erro ao cadastrar');
         await response.json();
         document.getElementById('input-nome').value = '';
         document.getElementById('input-quantidade').value = '';
@@ -97,19 +69,15 @@ document.getElementById('btn-cadastrar').addEventListener('click', async functio
 
 document.addEventListener('click', async function(event) {
     const target = event.target;
-
     if (target.classList.contains('btn-baixar')) {
         const id = target.dataset.id;
         const estoqueAtual = parseInt(target.dataset.quantidade);
         const quantidadeRetirada = parseInt(document.getElementById('input-retirada').value);
-
         if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
             alert('Quantidade inválida! Verifique se é maior que 0 e não excede o estoque.');
             return;
         }
-
         const novaQuantidade = estoqueAtual - quantidadeRetirada;
-
         try {
             const response = await fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
                 method: 'PUT',
@@ -124,11 +92,9 @@ document.addEventListener('click', async function(event) {
             alert('Erro ao dar baixa no estoque. Verifique sua conexão.');
         }
     }
-
     if (target.classList.contains('btn-excluir')) {
         const id = target.dataset.id;
         if (!confirm('Tem certeza que deseja excluir este item?')) return;
-
         try {
             const response = await fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
                 method: 'DELETE'
@@ -145,63 +111,13 @@ document.addEventListener('click', async function(event) {
 
 document.getElementById('input-busca').addEventListener('input', function() {
     const termo = this.value.toLowerCase().trim();
-    if (!window.dadosMateriais) return;
-    let filtrados = window.dadosMateriais;
-    if (termo !== '') {
-        filtrados = window.dadosMateriais.filter(item => 
+    if (termo === '') {
+        renderizarTabela(dadosMateriais);
+    } else {
+        const filtrados = dadosMateriais.filter(item =>
             item.nome.toLowerCase().includes(termo)
         );
-    }
-    renderizarTabela(filtrados);
-});
-
-document.addEventListener('click', function(event) {
-    const target = event.target;
-
-    if (target.classList.contains('btn-baixar')) {
-        const id = target.dataset.id;
-        const estoqueAtual = parseInt(target.dataset.quantidade);
-        const quantidadeRetirada = parseInt(document.getElementById('input-retirada').value);
-
-        if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
-            alert('Quantidade inválida! Verifique se é maior que 0 e não excede o estoque.');
-            return;
-        }
-
-        const novaQuantidade = estoqueAtual - quantidadeRetirada;
-
-        fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
-            method: 'PUT',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ quantidade: novaQuantidade })
-        })
-        .then(res => {
-            if (res.ok) return res.json();
-            throw new Error('Erro ao atualizar');
-        })
-        .then(() => carregarMateriais())
-        .catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao dar baixa no estoque');
-        });
-    }
-
-    if (target.classList.contains('btn-excluir')) {
-        const id = target.dataset.id;
-        if (!confirm('Tem certeza que deseja excluir este item?')) return;
-
-        fetch(`https://6a29e35ff59cb8f65f1db45f.mockapi.io/itens/${id}`, {
-            method: 'DELETE'
-        })
-        .then(res => {
-            if (res.ok) return res.json();
-            throw new Error('Erro ao excluir');
-        })
-        .then(() => carregarMateriais())
-        .catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao excluir material');
-        });
+        renderizarTabela(filtrados);
     }
 });
 
