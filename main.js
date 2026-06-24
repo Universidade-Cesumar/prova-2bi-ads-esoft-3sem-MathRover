@@ -96,6 +96,18 @@ document.getElementById('btn-cadastrar').addEventListener('click', function() {
         alert('Erro ao cadastrar material');
     });
 });
+    
+document.getElementById('input-busca').addEventListener('input', function() {
+    const termo = this.value.toLowerCase().trim();
+    if (!window.dadosMateriais) return;
+    let filtrados = window.dadosMateriais;
+    if (termo !== '') {
+        filtrados = window.dadosMateriais.filter(item => 
+            item.nome.toLowerCase().includes(termo)
+        );
+    }
+    renderizarTabela(filtrados);
+});
 
 document.addEventListener('click', function(event) {
     const target = event.target;
